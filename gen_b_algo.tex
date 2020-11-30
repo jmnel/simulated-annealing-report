@@ -1,0 +1,25 @@
+\begin{algorithm}
+\setstretch{1.4}
+\caption{Generate point alternative B - \texttt{gen\_point\_b}}\label{algo:gen-b}
+\vspace{8pt}
+\nosemic
+\SetAlgoLined
+\KwIn{
+$f:\mathcal{S} \longrightarrow \Real, 
+\nabla f, 
+\mathcal{S}, t$
+}
+
+$w \longleftarrow $ random( $[0,1)$ ) \;
+
+\If{$w > t$}
+{
+    $\vect{x} \longleftarrow $ sample( Uniform( $\mathcal{S}$ ) ) \;
+} \uElse {
+    
+    $\vect{x} \longleftarrow \texttt{grad\_descent}(f, \nabla f, \vect{x_0}, N=1 )$ \;
+}
+
+\Return{$\vect{x}$}
+
+\end{algorithm}

@@ -1,6 +1,7 @@
 \section{The Numerical Method}
 \label{sec:related}
 
+
 Since local optimality does not guarantee global optimality, a fundamental concern in global optimization is getting stuck at a local optimum point \cite{dekkers}. In order to avoid and overcome this, a specific class of stochastic optimization is used, which is simulated annealing. Simulated annealing originates from the physical annealing process that is well known in condensed matter physics \cite{dekkers}. Physical annealing is a thermal process where the heating and slow cooling of a metal in a heat bath brings it into a more uniformly crystalline state where the free energy takes its global minimum. The role of temperature in physical annealing is to allow the particles to reach higher energy states in order to overcome energy barriers that would force them into local minima \cite{neumaier}. \\
 \hspace*{3mm}In greater detail, a state with energy level $E_1$ is compared to a state with energy level $E_2$, which is obtained by moving one of the particles into another location by a small displacement. $E_2$ is only accepted if the movement of the particle brings the system in a state of lower energy (i.e. $E_2-E_1\leq0$). If this is not the case, a movement to a state of higher energy $E_2$ (also called a deterioration) is only accepted with probability 
 $e^-{\frac{(E_2-E_1)}{kT}}$, where $k$ is the Boltzmann constant and $T$ is the temperature \cite{dekkers}. However, the probability of accepting these deteriorations descends slowly towards zero as this process continues. Thus, the repetition of this process for a large enough number of particle movements using this stochastic acceptance criterion for deteriorations make it possible to overcome becoming stuck at local minima and leads to a (near) global minima \cite{dekkers}.\\
@@ -13,7 +14,10 @@ $e^-{\frac{(E_2-E_1)}{kT}}$, where $k$ is the Boltzmann constant and $T$ is the 
 \item a finite length, $L$, of each Markov chain\\ \cite{dekkers}   
 \end{itemize}
 
-The parameters of the cooling schedule are described below in more detail.
+%The parameters of the cooling schedule are described below in more detail.
+The algorithm for Simulated Annealing is \cref{algo:sa}. It makes use of 3 sub-procedures \textbf{(1)} \cref{algo:gen-a}
+ - \texttt{gen\_point\_a}, \textbf{(2)} \cref{algo:gen-b} - \texttt{gen\_point\_b}, and \textbf{(3)} \cref{algo:init_sched}
+  - \texttt{init\_schedule}. The following explain each part and their associated parameters and in more detail.
 
 \subsection{Initial value of the control parameter ($c_0$)}
 
@@ -54,6 +58,8 @@ $\Delta f^+$ values, we can determine $c_0$ with
     
   \caption{Using the Rosenbrock function, 50,000 transitions were computed. Among those, the positive transitions were selected and the exponential function $exp(-\Delta f/c)$  was applied and used as the acceptance criterion. Using three different $c$ values of 30, 50 and 1000, it is shown that a greater value of $c$ leads to more transitions given a higher probability of being accepted.}
 \end{figure}
+
+\input{init_sched_algo}
 
 \subsection{Decrement of the control parameter}
 The decrement function is used to decrease the value of $c$\\
@@ -124,247 +130,13 @@ Let $n$ be the dimension of $S$ and let $L_0$ be a constant called the standard 
 \begin{equation}
     L=L_0 \cdot n     
 \end{equation}
-is the length of the Markov chain, which must be sufficiently large in order to enable the algorithm to explore the neighbourhood of a given point in all directions \cite{dekkers}. \vspace{5pt}
+is the length of the Markov chain, which must be sufficiently large in order to enable the algorithm to explore 
+the neighbourhood of a given point in all directions \cite{dekkers}. \vspace{5pt}
 
-A pseudo-code for the algorithm can be found in \textbf{Algorithm \ref{algo:sa}}.
+%A pseudo-code for the algorithm can be found in \textbf{Algorithm \ref{algo:sa}}.
 
+\input{sa_algo}
 
-\begin{algorithm}
-\setstretch{1.4}
-\caption{Simulated Annealing}\label{algo:sa}
-\vspace{8pt}
-\nosemic
-\SetAlgoLined
-\KwIn{
-$f:\mathcal{S} \longrightarrow \Real, 
-\nabla f, 
-\mathcal{S}, 
-l_0,
-\epsilon_s,
-\gamma$
-}
-
-$l \longleftarrow l_0 \cdot \texttt{dim}(\mathcal{S}) $ \;
-$c_0 \longleftarrow \texttt{init\_schedule}(\mathcal{S}, \chi, m) $ \;
-
-$c  \longleftarrow c_0$ \;
-
-$\vect{x} \longleftarrow \texttt{gen\_point\_a}(\mathcal{S})$ \;
-
-f\_x $\longleftarrow f(\vect{x})$ \;
-
-\While{true}
-{
-    f\_at\_c \longleftarrow $\left\lbrace f(\vect{x}) \right\rbrace$ \;
-
-    chain $\longleftarrow \left\lbrace \: \right\rbrace$ \;
-
-    \For{ $i \in \left\lbrace 1, \ldots, l\right\rbrace$} {
-
-        $\vect{y} \longleftarrow \texttt{gen\_point\_b}(\vect{x}, f, \nabla f,\mathcal{S}, t )  $ \;
-
-        f\_y $\longleftarrow f(\vect{y})$ \;
-
-        $\Delta \longleftarrow $ f\_y - f\_x \;
-
-        \Comment{a}
-        \If{ $\Delta \leq 0$ or $\exp\left( -\Delta /c ) > \texttt{random}[0,1) $ }
-        {
-            $\vect{x} \longleftarrow \vect{y} $ \;
-
-            chain$.\texttt{push}(\vect{y})$ \;
-            f\_at\_c$.\texttt{push}($ f\_y $)$\;
-
-            f\_x $\longleftarrow$ f\_y \;
-
-
-        }
-
-
-    }
-
-    $\overline{f} \longleftarrow \texttt{mean}(f\_at\_c)$ \;
-    $\sigma \longleftarrow \texttt{std}(f\_at\_c)$ \;
-
-    \If{ $\sigma = 0$ }{
-        $\sigma \longleftarrow 10^{-14}$ \;
-    }
-
-    \uIf{ $n= 0$ } {
-        $\overline{f}_s \longleftarrow \overline{f}$ \;
-        $\overline{f}_0 \longleftarrow \overline{f}$ \;
-
-    } 
-    \uElse {
-    $\overline{f}_s^{(0)} \longleftarrow \overline{f} $ \;
-
-    $\overline{f}_s = (1 - \gamma) \overline{f}_s + \gamma \overline{f} $\;
-}
-
-    $c_{n-1} \longleftarrow = c$ \;
-
-    $
-    c \longleftarrow c\left(1 + \log\frac{1 + \delta}{3 \sigma}\right)^{-1}
-    $
-
-    dc $\longleftarrow c - c_{n-1}$ \;
-
-    \If{ $n > 0$ and dc $ \neq 0$ } {
-        $d\overline{f}_s \longleftarrow \overline{f}_s - \overline{f}_s^{(0)}$ \;
-
-        \vspace{5pt}
-
-        \If{
-        $\displaystyle\left| \frac{d\overline{f}_s }{dc}\frac{c}{\overline{f}_0} \right| < \epsilon_s $ }
-        {
-            \Return{$\vect{x}^\star = \vect{x}, f(\vect{x}^\star)$ } \;
-        }
-        
-        \vspace{5pt}
-    }
-
-    $n \longleftarrow n+1 $ \;
-
-}
-
-\end{algorithm}
-
-\begin{algorithm}
-\setstretch{1.4}
-\caption{Init. schedule - \texttt{init\_schedule}}\label{algo:sa}
-\vspace{8pt}
-\nosemic
-\SetAlgoLined
-
-\KwIn{
-$f:\mathcal{S} \longrightarrow \Real, 
-\mathcal{S}, 
-\chi,
-m$
-}
-
-$\vect{x}_0 \longleftarrow$ gen\_point\_a( $\mathcal{S}$ ) \;
-
-\For{i $\in \left\lbrace 1, \ldots m-1\right\rbrace$} {
-    $\vect{x}_i \longleftarrow $ gen\_point\_b( $\vect{x}_{i-1}$ ) \;
-}
-
-$\Delta_i = f(\vect{x}_{i+1}) - f(\vect{x}_i)$ for $i = 0,\ldots m-1$ \;
-
-$\Delta^+ = \left\lbrace \Delta_i : \Delta_i > 0 \right\rbrace $ \;
-
-cutoff $\longleftarrow$ $\chi$-quantile( $\Delta^+$ ) \;
-
-$C_0 \longleftarrow -\text{ cutoff} / \log(\chi)$ \;
-
-\Return{$C_0$} \;
-
-
-\end{algorithm}
-
-\begin{algorithm}
-\setstretch{1.4}
-\caption{Generate point alternative A - \texttt{gen\_point\_a}}\label{algo:sa}
-\vspace{8pt}
-\nosemic
-\SetAlgoLined
-\KwIn{
-    $\mathcal{S}$
-}
-
-$\vect{x} \longleftarrow$ sample(Uniform($\mathcal{S})) $ \;
-
-\Return{$\vect{x}$}
-
-\end{algorithm}
-
-\begin{algorithm}
-\setstretch{1.4}
-\caption{Generate point alternative B - \texttt{gen\_point\_b}}\label{algo:gen-b}
-\vspace{8pt}
-\nosemic
-\SetAlgoLined
-\KwIn{
-$f:\mathcal{S} \longrightarrow \Real, 
-\nabla f, 
-\mathcal{S}, t$
-}
-
-$w \longleftarrow $ random( $[0,1)$ ) \;
-
-\If{$w > t$}
-{
-    $\vect{x} \longleftarrow $ sample( Uniform( $\mathcal{S}$ ) ) \;
-} \uElse {
-    
-    $\vect{x} \longleftarrow \texttt{grad\_descent}(f, \nabla f, \vect{x_0}, N=1 )$ \;
-}
-
-\Return{$\vect{x}$}
-
-\end{algorithm}
-
-%$f^\star \longleftarrow \infty$\;
-
-%\;
-
-%\For{$n\in \left\lbrace 1,\ldots, N\right\rbrace$}{
-%$\vect{x}_0 \longleftarrow \mathrm{Uniform}\left(\mathcal{S}\right)$ \Comment*{random sample init. point}
-
-%$x_l = \texttt{steepest\_descent}(f, \nabla f, \vect{x}_0, \tau)$ \;
-
-%\If{$f(\vect{x}_l) \leq f^\star$}{
-%    $f^\star \longleftarrow f(\vect{x}_l)$ \;
-%    
-%    $\vect{x}^\star \longleftarrow \vect{x}_l$ \;
-%}
-
-%\uIf{$n=0$}{
-%    $f^\star_s \longleftarrow C$ \Comment*{$0< C \in\Real$ to prevent 0}
-%    $f^\star_s^{(0)} \longleftarrow f_s^\star$ \;
-%} \uElse{
-%    $f^\star_s^{(0)} \longleftarrow f^\star_s$ \;
-%    $f^\star_s = \gamma f^\star + (1-\gamma)f^\star_s^{(0)}$
-%    \;
-%    \Comment{Stop when smoothed improvement reaches 0}
-%    $\Delta_s = f^\star_s^{(0)} - f^\star_s$ \;
-%    
-%    \Comment{Check stop condition}
-%    \If{ $\Delta_s \leq \epsilon_s$}{
-%        \KwOut{Solution found $\vect{x}^\star$}
-%    }
-%}
-
-%\;
-%\KwOut{Failed to find solution in $N$ iterations, $\vect{x}^\star$}\;
-%}
-%\end{algorithm}
-
-%\begin{algorithm}[t]
-%\caption{\textsc{Simulated Annealing}}
-%\begin{algorithmic}
-%\STATE begin
-%\STATE "initialize $(c,x)$;"
-%\STATE stopcriterion := false;
-%\WHILE{stopcriterion = false} 
-%\STATE begin
-%\FOR{$i$:=1 \TO $L$}
-%\STATE begin
-%\STATE "generate $y$ from $x$";
-%\IF{$f(y)-f(x) \leq 0$}
-%\STATE accept
-%\ELSIF{$\exp{(-(f(y)-f(x))/c)} > \textsc{random}[0,1)$}
-%\STATE accept;
-%\IF{accept}
-%\STATE $x:=y$
-%\ENDIF
-%\ENDIF
-%\STATE "lower c"
-%\ENDFOR
-%\ENDWHILE
-%\end{algorithmic}
-%\label{algo:sa}
-%\end{algorithm}
 
 \subsection{Generation of Points} 
 \label{sec:gen-points}
@@ -374,7 +146,9 @@ There are several ways to generate new points from a given point and two alterna
     \begin{equation}
         g_{xy}=\frac{1}{m(S)} 
     \end{equation}
-A disadvantage about Alternative A is that no structural information about function values is used \cite{dekkers}.
+    Refer to \cref{algo:gen-a} for details. A disadvantage about Alternative A is that no structural information about 
+    function values is used \cite{dekkers}.
+
     \item Either a point is drawn from a uniform distribution over $S$ or a step is made into a descent direction from the current point:
     \begin{equation}
     g_{xy}=\begin{cases}
@@ -382,9 +156,16 @@ A disadvantage about Alternative A is that no structural information about funct
           \dfrac{1}{m(S)} \quad &\text{if} \, w \leq t \\
      \end{cases} 
     \end{equation}
-    where $t$ is a fixed number in the interval [0,1) and $w$ is a random number from $U$[0,1). LS(x) is a Local Search procedure (i.e Steepest Descent Method) that generates a point $y$ in a descent direction of $x$. \cite{dekkers}
-
+    where $t$ is a fixed number in the interval [0,1) and $w$ is a random number from $U$[0,1). 
+    $\texttt{LS}(x)$ is a Local Search procedure (i.e Steepest Descent Method) that generates a point $\vect{y}$ in a 
+    descent direction of $\vect{x}$. \cite{dekkers}
+    Refer to \cref{algo:gen-b} for details.
 \end{enumerate}
+
+\input{gen_a_algo}
+
+\input{gen_b_algo}
+
 
 
 
