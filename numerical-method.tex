@@ -144,6 +144,89 @@ l_0,
 \gamma$
 }
 
+$l \longleftarrow l_0 \cdot \texttt{dim}(\mathcal{S}) $ \;
+$c_0 \longleftarrow \texttt{init\_schedule}(\mathcal{S}, \chi, m) $ \;
+
+$c  \longleftarrow c_0$ \;
+
+$\vect{x} \longleftarrow \texttt{gen\_point\_a}(\mathcal{S})$ \;
+
+f\_x $\longleftarrow f(\vect{x})$ \;
+
+\While{true}
+{
+    f\_at\_c \longleftarrow $\left\lbrace f(\vect{x}) \right\rbrace$ \;
+
+    chain $\longleftarrow \left\lbrace \: \right\rbrace$ \;
+
+    \For{ $i \in \left\lbrace 1, \ldots, l\right\rbrace$} {
+
+        $\vect{y} \longleftarrow \texttt{gen\_point\_b}(\vect{x}, f, \nabla f,\mathcal{S}, t )  $ \;
+
+        f\_y $\longleftarrow f(\vect{y})$ \;
+
+        $\Delta \longleftarrow $ f\_y - f\_x \;
+
+        \Comment{a}
+        \If{ $\Delta \leq 0$ or $\exp\left( -\Delta /c ) > \texttt{random}[0,1) $ }
+        {
+            $\vect{x} \longleftarrow \vect{y} $ \;
+
+            chain$.\texttt{push}(\vect{y})$ \;
+            f\_at\_c$.\texttt{push}($ f\_y $)$\;
+
+            f\_x $\longleftarrow$ f\_y \;
+
+
+        }
+
+
+    }
+
+    $\overline{f} \longleftarrow \texttt{mean}(f\_at\_c)$ \;
+    $\sigma \longleftarrow \texttt{std}(f\_at\_c)$ \;
+
+    \If{ $\sigma = 0$ }{
+        $\sigma \longleftarrow 10^{-14}$ \;
+    }
+
+    \uIf{ $n= 0$ } {
+        $\overline{f}_s \longleftarrow \overline{f}$ \;
+        $\overline{f}_0 \longleftarrow \overline{f}$ \;
+
+    } 
+    \uElse {
+    $\overline{f}_s^{(0)} \longleftarrow \overline{f} $ \;
+
+    $\overline{f}_s = (1 - \gamma) \overline{f}_s + \gamma \overline{f} $\;
+}
+
+    $c_{n-1} \longleftarrow = c$ \;
+
+    $
+    c \longleftarrow c\left(1 + \log\frac{1 + \delta}{3 \sigma}\right)^{-1}
+    $
+
+    dc $\longleftarrow c - c_{n-1}$ \;
+
+    \If{ $n > 0$ and dc $ \neq 0$ } {
+        $d\overline{f}_s \longleftarrow \overline{f}_s - \overline{f}_s^{(0)}$ \;
+
+        \vspace{5pt}
+
+        \If{
+        $\displaystyle\left| \frac{d\overline{f}_s }{dc}\frac{c}{\overline{f}_0} \right| < \epsilon_s $ }
+        {
+            \Return{$\vect{x}^\star = \vect{x}, f(\vect{x}^\star)$ } \;
+        }
+        
+        \vspace{5pt}
+    }
+
+    $n \longleftarrow n+1 $ \;
+
+}
+
 \end{algorithm}
 
 \begin{algorithm}
@@ -168,7 +251,7 @@ $\vect{x}_0 \longleftarrow$ gen\_point\_a( $\mathcal{S}$ ) \;
 
 $\Delta_i = f(\vect{x}_{i+1}) - f(\vect{x}_i)$ for $i = 0,\ldots m-1$ \;
 
-$\Delta^+ = \left\lbrace \Delta_i : \Delta_i > 0 \right\rbrace \;
+$\Delta^+ = \left\lbrace \Delta_i : \Delta_i > 0 \right\rbrace $ \;
 
 cutoff $\longleftarrow$ $\chi$-quantile( $\Delta^+$ ) \;
 
@@ -186,25 +269,25 @@ $C_0 \longleftarrow -\text{ cutoff} / \log(\chi)$ \;
 \nosemic
 \SetAlgoLined
 \KwIn{
-\mathcal{S}
+    $\mathcal{S}$
 }
 
-$\vect{x} \longleftarrow$ sample(Uniform($\mathcal{S})) \;
+$\vect{x} \longleftarrow$ sample(Uniform($\mathcal{S})) $ \;
 
-\Return{\vect{x}}
+\Return{$\vect{x}$}
 
 \end{algorithm}
 
 \begin{algorithm}
 \setstretch{1.4}
-\caption{Generate point alternative B}\label{algo:gen-b}
+\caption{Generate point alternative B - \texttt{gen\_point\_b}}\label{algo:gen-b}
 \vspace{8pt}
 \nosemic
 \SetAlgoLined
 \KwIn{
 $f:\mathcal{S} \longrightarrow \Real, 
 \nabla f, 
-\mathcal{S}, t
+\mathcal{S}, t$
 }
 
 $w \longleftarrow $ random( $[0,1)$ ) \;
@@ -214,14 +297,10 @@ $w \longleftarrow $ random( $[0,1)$ ) \;
     $\vect{x} \longleftarrow $ sample( Uniform( $\mathcal{S}$ ) ) \;
 } \uElse {
     
-    \Comment{Perform one iteration of gradient descent}
-    $\vect{x} \longleftarrow \texttt{grad\_descent}(f, \nabla f, \vect{x_0}, N=1 )$\;
-
-    $\vect{x} \longleftarrow \texttt{clip}( \vect{x}, \mathcal{S} )$ 
-    \Comment{Keep $\vect{x}$ inside $\mathcal{S}$ }
+    $\vect{x} \longleftarrow \texttt{grad\_descent}(f, \nabla f, \vect{x_0}, N=1 )$ \;
 }
 
-\Return $\vect{x}$
+\Return{$\vect{x}$}
 
 \end{algorithm}
 
