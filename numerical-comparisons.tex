@@ -125,6 +125,80 @@ $$
 u_i^{(2)} = u_i + \frac{1}{2}\left( 2^{1/n} - 1\right)\left( u_i - l_i \right)\text{ for } i = 1,\ldots n
 $$
 
+
+\begin{algorithm}
+\setstretch{1.4}
+\caption{Multi-start}\label{algo:multistart}
+\vspace{8pt}
+\nosemic
+\SetAlgoLined
+\KwIn{
+    $f:\mathcal{S}\longleftarrow \Real,
+    \nabla f,
+    \mathcal{S},
+    \tau, \rho, \epsilon_s, N
+    $
+}
+
+$\mathcal{S}_2 \longleftarrow \texttt{scale}(\mathcal{S}, 2) $ \;
+
+$M_n \longleftarrow 0$ \;
+
+x\_minima $ \longleftarrow \left\lbrace \: \right\rbrace$ \;
+deltas $ \longleftarrow \left\lbrace \: \right\rbrace$ \;
+
+f\_best $\longleftarrow \infty$ \;
+
+\For{ $n \in \left\lbrace 1,\ldots, N\right\rbrace$ } {
+
+    \While{true} {
+        $\vect{x} \longleftarrow \texttt{sample}(\mathcal{S}_2) $ \;
+
+        $M_n \longleftarrow M_n + 1$ \;
+
+        \If{ $\vect{x} \in \mathcal{S}$ } {
+            \textbf{break} \;
+        }
+    }
+
+    $\vect{x}_{ls} \longleftarrow \texttt{LS}( f, \vect{x}, \nabla f ) $\;
+
+    \If{ $\vect{x}_{ls} \not\in \mathcal{S}$ } {
+        \textbf{continue} \;
+    }
+
+    $\Delta = n / M_n$ \;
+    deltas$.\texttt{push}(\delta)$ \;
+
+    f\_ls $\longleftarrow f(\vect{x}_{ls}) $ \;
+
+    $\sigma^2 \longleftarrow \texttt{var}(\text{deltas})$ \;
+
+    \If{ f\_ls < f\_best } {
+        f\_best = f\_ls \;
+        $\vect{x}^\star \longleftarrow \vect{x}_{ls}$ \;
+    }
+
+    \If{ $\vect{x}^\star \not\in \text{x\_minima}$ } {
+        $\sigma^2_{prev} \longleftarrow \sigma^2$ \;
+        x\_minima$.\texttt{push}( \vect{x}_{ls} )$ \;
+    } 
+    \uElse {
+
+    \Comment{Check double-box stop cond.}
+    \If { $\sigma^2 < \rho \cdot \sigma^2_{prev}$ } {
+        \Return{ $\vect{x}^\star$ }
+    }
+
+}
+}
+\;
+\KwOut{`failed to reach tolerance in $N$ iterations'}
+\Return{ $\vect{x}^\star$ }
+
+%\Return{$\vect{x}$}
+
+\end{algorithm}
 %\begin{algorithm}
 %\setstretch{1.4}
 %\caption{Multi-start with double-box stopping rule}\label{algo:multistart}
