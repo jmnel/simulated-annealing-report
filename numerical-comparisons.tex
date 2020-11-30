@@ -248,13 +248,17 @@ f\_best $\longleftarrow \infty$ \;
 
 Differential Evolution is global, gradient-free stochastic optimization algorithm. This population-based method mutates
 each solution candidate by mixing the solution with other members of the  population \cite{storn}.
-\emph{scipy.optim.differential\_evolution} is used as comparison.
+We use
+
+\noindent\texttt{scipy.optim.differential\_evolution} for comparison.
 
 \subsection{BH (Basin Hopping)}
 \label{compare:bh}
 
 Basin-hopping is another two-phase global optimization algorithm inspired by energy minimization of clusters of atoms \cite{wales}.
-\emph{scipy.optimize.basinhopping} is used for comparison.
+We use
+
+\noindent\texttt{scipy.optimize.basinhopping} for comparison.
 
 
 \subsection{Evaluation metrics}
@@ -266,13 +270,12 @@ $k_i$ denote the number of runs to find all $w$ global minima on the $i$-th tria
 \subsubsection{Metric 1: Number of runs required to find all global minima}\label{metric1}
 
 One method to compare various global optimization methods is to calculate the number of runs required to find all
-global minima for a given benchmark, averaged over $M$ runs.
+global minima for a given benchmark, averaged over $M$ runs, divided by the number of minima $w$.
+We can define metric $\xi_1$ with \cref{eq:metric1}.
 
-We can define $\xi_1$ as
-
-$$
-\xi_1 = \frac{1}{M} \sum_{i=1}^M k_i 
-$$
+\begin{equation}\label{eq:metric1}
+\xi_1 = \frac{1}{wM} \sum_{i=1}^M k_i 
+\end{equation}
 
 \subsubsection{Metric 2: Number of function evaluations to find all global minima}\label{metric2}
 
@@ -280,12 +283,75 @@ Different optimization methods use evaluations of $f$ and $\nabla f$ in very dif
 local search will incur large numbers of calls to these functions inside of their inner loops. Examining the average
 number of these evaluations to find all global minima of a given benchmark function is a good way to compare the
 computational cost of various methods. Similiar to \cref{metric1}, we average the number of required calls over
-$M$ trials. Suppose it takes $k_i$ runs to find all $w$ global minima, on the $i$-th trial, 
-where $i\in\left\lbrace 1,\ldots, M\right\rbrace$. We can define metric 2 as
+$M$ trials. Furtheremore, to make comparisons accross different benchmakrs, divide by the number of minima $w$.
+Suppose it takes $k_i$ runs to find all $w$ global minima, on the $i$-th trial, 
+where $i\in\left\lbrace 1,\ldots, M\right\rbrace$. We define metric $\xi_2$ with \cref{eq:metric2}.
 
-$$
-\xi_2 = \frac{1}{M}\sum_{i=1}^M \sum_{j=1}^{k_i} \left( n(f_{ij}) + n(\nabla_{ij}) \right),
-$$
+\begin{equation}\label{eq:metric2}
+\xi_2 = \frac{1}{wM}\sum_{i=1}^M \sum_{j=1}^{k_i} \left( n(f_{ij}) + n(\nabla_{ij}) \right),
+\end{equation}
 
 where $n(f_{ij})$ and $n(\nabla_{ij})$ denotes the number of evaluations of the function $f$ and its Jacobian respectively,
 incurred during the $j$-th run of the $i$-th trial.
+
+\begin{table}
+    \center
+    \caption{Finding all minima}
+    \label{table:compare-all}
+    \footnotesize
+    \setstretch{1.4}
+    \begin{tabular}{cc|ccccc}
+        Benchmark $f$ & Method & $\overline{n(f_{ij})}$ & $\overline{n(\nabla_{ij})}$ & $\Delta t$ (ms) & $\xi_1$ & $\xi_2$  \\
+        \hline
+RB  & BH & 6590.6 & 2045.5 & 458 & 1.0 & 4318.0 \\
+ & DE & 3895.5 & 0.0 & 232 & 1.0 & 1948.0 \\
+ & MS & 1031.4 & 981.5 & 90 & 1.0 & 1006.0 \\
+ & SA & 631.8 & 220.0 & 15 & 1.0 & 426.0 \\
+\hline
+GP  & BH & 19532.9 & 6181.6 & 1279 & 1.0 & 12857.0 \\
+ & DE & 966.4 & 0.0 & 63 & 1.0 & 483.0 \\
+ & MS & 608.2 & 575.2 & 73 & 1.0 & 592.0 \\
+ & SA & 1056.3 & 378.4 & 48 & 1.6 & 717.0 \\
+\hline
+BR  & BH & 20369.5 & 6665.0 & 1422 & 1.8 & 4506.0 \\
+ & DE & 9163.4 & 0.0 & 569 & 3.1 & 1527.0 \\
+ & MS & 1437.3 & 1293.0 & 139 & 2.02 & 455.0 \\
+ & SA & 2761.4 & 946.5 & 77 & 1.57 & 618.0 \\
+\hline
+H3  & BH & 8817.8 & 2177.6 & 580 & 1.0 & 5498.0 \\
+ & DE & 22736.6 & 0.0 & 1625 & 16.15 & 11368.0 \\
+ & MS & 444.9 & 418.3 & 61 & 1.0 & 432.0 \\
+ & SA & 570.2 & 207.8 & 34 & 1.1 & 389.0 \\
+\hline
+H6  & BH & 22008.6 & 3132.0 & 1267 & 1.0 & 12570.0 \\
+ & DE & 22513.6 & 0.0 & 1807 & 4.5 & 11257.0 \\
+ & MS & 876.7 & 845.6 & 215 & 1.0 & 861.0 \\
+ & SA & 629.1 & 252.2 & 72 & 1.45 & 441.0 \\
+    \end{tabular}
+\end{table}
+
+\begin{figure}
+    \center
+    \caption{Finding all minima}
+    \label{fig:compare1}
+    \includegraphics[scale=0.5]{figures/compare1-1.pdf}
+\end{figure}
+
+\begin{figure}
+    \center
+    \caption{Finding all minima (log scale)}
+    \label{fig:compare-log}
+    \includegraphics[scale=0.5]{figures/compare1-2.pdf}
+\end{figure}
+
+\Cref{table:compare-all} shows that, in terms of average running time $\overline{\Delta t}$,
+our implementation of Simulated Annealing outperformed all other methods on every benchmark. Multi-start is arguably
+the second best performing method. \Cref{fig:compare1} shows that SA has generally faster running time. Mutli-start
+might use less function evaluations.
+
+One aspect of the robustness of a numerical method, is that there will not be large unexpected running times. In this
+aspect, Simulated Annealing is significantly better than the other methods that were evaluated. Function evaluation/
+running time points are tightly clustered towards the origin in \cref{fig:compare1} in comparison with the other methods.
+In comparison, Differential Evolution, on some instances, produced extreme outliers. Even the Multi-start method
+does not show such a tight clustering.
+

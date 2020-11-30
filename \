@@ -1,6 +1,9 @@
 \section{The Numerical Method}
 \label{sec:related}
 
+The algorithm for Simulated Annealing is \cref{algo:sa}. It makes use of 3 sub-procedures \textbf{(1)} \cref{algo:gen-a}
+ - \texttt{gen\_point\_a}, \textbf{(2)} \cref{algo:gen-b} - \texttt{gen\_point\_b}, and \textbf{(3)} \cref{algo:init_sched}
+  - \texttt{init\_schedule}. The following explain each part in more detail.
 
 Since local optimality does not guarantee global optimality, a fundamental concern in global optimization is getting stuck at a local optimum point \cite{dekkers}. In order to avoid and overcome this, a specific class of stochastic optimization is used, which is simulated annealing. Simulated annealing originates from the physical annealing process that is well known in condensed matter physics \cite{dekkers}. Physical annealing is a thermal process where the heating and slow cooling of a metal in a heat bath brings it into a more uniformly crystalline state where the free energy takes its global minimum. The role of temperature in physical annealing is to allow the particles to reach higher energy states in order to overcome energy barriers that would force them into local minima \cite{neumaier}. \\
 \hspace*{3mm}In greater detail, a state with energy level $E_1$ is compared to a state with energy level $E_2$, which is obtained by moving one of the particles into another location by a small displacement. $E_2$ is only accepted if the movement of the particle brings the system in a state of lower energy (i.e. $E_2-E_1\leq0$). If this is not the case, a movement to a state of higher energy $E_2$ (also called a deterioration) is only accepted with probability 
@@ -14,10 +17,7 @@ $e^-{\frac{(E_2-E_1)}{kT}}$, where $k$ is the Boltzmann constant and $T$ is the 
 \item a finite length, $L$, of each Markov chain\\ \cite{dekkers}   
 \end{itemize}
 
-%The parameters of the cooling schedule are described below in more detail.
-The algorithm for Simulated Annealing is \cref{algo:sa}. It makes use of 3 sub-procedures \textbf{(1)} \cref{algo:gen-a}
- - \texttt{gen\_point\_a}, \textbf{(2)} \cref{algo:gen-b} - \texttt{gen\_point\_b}, and \textbf{(3)} \cref{algo:init_sched}
-  - \texttt{init\_schedule}. The following explain each part and their associated parameters and in more detail.
+The parameters of the cooling schedule are described below in more detail.
 
 \subsection{Initial value of the control parameter ($c_0$)}
 
@@ -59,7 +59,7 @@ $\Delta f^+$ values, we can determine $c_0$ with
   \caption{Using the Rosenbrock function, 50,000 transitions were computed. Among those, the positive transitions were selected and the exponential function $exp(-\Delta f/c)$  was applied and used as the acceptance criterion. Using three different $c$ values of 30, 50 and 1000, it is shown that a greater value of $c$ leads to more transitions given a higher probability of being accepted.}
 \end{figure}
 
-\input{init_sched_algo}
+\input{algo:init_sched_algo}
 
 \subsection{Decrement of the control parameter}
 The decrement function is used to decrease the value of $c$\\
