@@ -128,6 +128,53 @@ is the length of the Markov chain, which must be sufficiently large in order to 
 
 A pseudo-code for the algorithm can be found in \textbf{Algorithm \ref{algo:sa}}.
 
+
+\begin{algorithm}
+\setstretch{1.4}
+\caption{Simulated Annealing}\label{algo:sa}
+\vspace{8pt}
+\nosemic
+\SetAlgoLined
+\KwIn{$f:\mathcal{S} \longrightarrow \Real, \nabla f, \mathcal{S}, N, \epsilon_s, \tau, \gamma$}
+
+\end{algorithm}
+
+%$f^\star \longleftarrow \infty$\;
+
+%\;
+
+%\For{$n\in \left\lbrace 1,\ldots, N\right\rbrace$}{
+%$\vect{x}_0 \longleftarrow \mathrm{Uniform}\left(\mathcal{S}\right)$ \Comment*{random sample init. point}
+
+%$x_l = \texttt{steepest\_descent}(f, \nabla f, \vect{x}_0, \tau)$ \;
+
+%\If{$f(\vect{x}_l) \leq f^\star$}{
+%    $f^\star \longleftarrow f(\vect{x}_l)$ \;
+%    
+%    $\vect{x}^\star \longleftarrow \vect{x}_l$ \;
+%}
+
+%\uIf{$n=0$}{
+%    $f^\star_s \longleftarrow C$ \Comment*{$0< C \in\Real$ to prevent 0}
+%    $f^\star_s^{(0)} \longleftarrow f_s^\star$ \;
+%} \uElse{
+%    $f^\star_s^{(0)} \longleftarrow f^\star_s$ \;
+%    $f^\star_s = \gamma f^\star + (1-\gamma)f^\star_s^{(0)}$
+%    \;
+%    \Comment{Stop when smoothed improvement reaches 0}
+%    $\Delta_s = f^\star_s^{(0)} - f^\star_s$ \;
+%    
+%    \Comment{Check stop condition}
+%    \If{ $\Delta_s \leq \epsilon_s$}{
+%        \KwOut{Solution found $\vect{x}^\star$}
+%    }
+%}
+
+%\;
+%\KwOut{Failed to find solution in $N$ iterations, $\vect{x}^\star$}\;
+%}
+%\end{algorithm}
+
 %\begin{algorithm}[t]
 %\caption{\textsc{Simulated Annealing}}
 %\begin{algorithmic}
