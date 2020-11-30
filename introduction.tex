@@ -1,0 +1,26 @@
+\section{Introduction}
+\label{sec:intro}
+
+Global optimization, a branch of applied mathematics and numerical analysis, is concerned with finding points on a bounded subset $S$ of $\mathbb{R}^n$ in which some function $f$ assumes its optimal value \cite{dekkers}. The function may have numerous local optima values and instead of searching for local points that cannot be improved, global optimization aims to find the global optimum on the bounded subset \cite{neumaier}. Thus, global optimization is a stronger version of local optimization and is desirable, but not necessary, in many practical applications; however, there are several applications where the use of global optimization is crucial including problems in safety verification, chemistry and hard feasibility problems \cite{neumaier}. In these cases, using local optimization methods could potentially return useless information, could be unrealistic with respect to the real world or could potentially underestimate the problem at hand \cite{neumaier}. Despite the obvious importance of global optimization and the efforts that have been invested into developing algorithms, the results have been unsatisfactory thus far and more work is needed for the optimization of more complicated functions \cite{dekkers}. Currently, numerical methods are used for the optimization of complicated functions, but these often cannot produce optimal results and will return a value close to a global optimum instead. By 'close to', we mean the following:
+
+\begin{definition}['Close To' Global Minimum]
+For $\epsilon > 0, B_f(\epsilon) $ is the set of points with a value close to the minimal point, i.e.
+\begin{equation}
+    B_f(\epsilon)=\{x \in S |\exists_{{x}_{min}}:|f(x)-f({x}_{min})|<\epsilon \}
+\end{equation}
+\end{definition}
+
+Furthermore, we construct a formal definition for what it means for a set of points to be close to a minimal point:
+\begin{definition}
+Let $\epsilon$ be any positive real number. Then we define $B_x(\epsilon)$ to be the set such that:
+\begin{equation}
+    B_x(\epsilon) = \{ x \in S \, | \, \exists x_{\min} \, : \, ||x-x_{\min}|| < \epsilon \}
+\end{equation}
+and this is a set containing all points close to the minimal.
+\label{def:close-to-min}
+\end{definition}
+
+There are two classes of numerical methods in regards to global optimization: deterministic, in which the minimization process depends on probabilistic events, and stochastic methods, which does not use probabilistic information \cite{dekkers}. Unfortunately, deterministic global optimization methods have several disadvantages including that the global optimum can only be found after an exhaustive search over $S$, there is no guarantee of success from the method and that many assumptions must be made about $f$ \cite{dekkers}. On the other hand, stochastic methods generally have better computational results than deterministic methods and can almost all be proven to find a global optimum that is asymptotically convergent with probability 1 \cite{dekkers}. With this taken into consideration, the concentration of global optimization methods will be on stochastic methods, specifically simulated annealing. 
+
+
+

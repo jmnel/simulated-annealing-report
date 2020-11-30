@@ -1,0 +1,159 @@
+\section{Theoretical Results}
+\label{sec: methodology}
+The mathematical model of the simulated annealing algorithm is based on the theory of Markov chains and thus, the following definitions are necessary: \vspace{5pt}
+
+\begin{definition}[Markov Chains]
+A \textit{Markov chain} in the simulated annealing algorithm is a sequence of trials. $X(k)$ is a random variable denoting the $k$th trial by simulated annealing, and the outcome of a trial is a point $x \in S$ that is dependent on the previous trial.
+\end{definition}
+
+\begin{definition}[The Generation Probability Distribution]
+$g_{xy}$, as seen in \textbf{Section \ref{sec:gen-points}}, is the \textit{generation probability distribution}. That is, $g_{xy}$ is the probability distribution function for generating a point $y$ from point $x$ at a fixed value of the control parameter $c$.
+\end{definition}
+
+\begin{definition}[Acceptance Probability]
+$A_{xy}$ is the \textit{acceptance probability}. That is, $A_{xy}$ is the probability of accepting point $y$ as a possible new point if $x$ is the current point in a Markov chain.
+\end{definition}
+
+\begin{definition}[Transition Probability]
+A point $x \in S$ transformed to a point $y \in T \subset S$,  with the probability of generating and accepting a point in $T$ given that $x \notin T$ is called a \textit{transition probability}. Hence, for any current point $x$ in the Markov Chain, then the probability that an element in $T$ is the next point of the chain is given as:
+\begin{equation}
+    P(T \, | \, x; \, c) = \begin{dcases}
+        \hfil \int_{y \in T} p_{xy}(c) \, \dd y & \text{for } x \notin T \\
+        \int_{y \in T} p_{xy}(c) \, \dd y + \Bigg( 1 - \int_{y \in S} p_{xy}(c) \, \dd y \Bigg) & \text{for } x \in T \\
+    \end{dcases}
+\end{equation}
+where
+\begin{equation}
+    p_{xy}(c) = g_{xy} \cdot A_{xy}(c)
+\end{equation}
+and
+\begin{equation}
+    P(T \, | \, x; \, c) = \mathbb{P}\{ X(l) \in T \, | \, X(l-1) = x\, ;\, c \}
+\end{equation}
+\end{definition}
+
+\subsection{Asymptotic Convergence of the Algorithm}
+
+Before asymptotic convergence of the algorithm is proved, the following definitions are necessary:
+
+\begin{definition}[Stationary Probability Distribution Function]
+A probability distribution function $r(x,c)$ is said to be \textit{stationary} if the following two conditions are met:
+\begin{align}
+    (1)\, & \, \forall_{x \in S}:r(x,c)=\int_{y \in S} r(y,c)p_{yx}(c) \dd y &  \notag \\
+    & \hspace{25mm} + r(x,c) \Bigg( 1-\int_{y \in S} p_{xy}(c) \, \dd y \Bigg) &  \\
+    (2) \,& \, \int_{x \in S} r(x,c) \dd x =1
+\end{align}
+\end{definition}
+
+From this definition, the following is a stationary probability distribution since it meets the two conditions, which will later be used to show that the simulated annealing algorithm converges to a near minimal solution:
+\begin{equation}
+    q(x,c)=\exp{\Bigg( -\dfrac{f(x)-f_{\min}}{c} \Bigg)} \Bigg[ \int_{y \in S} \exp{\Bigg( -\dfrac{f(y)-f_{\min}}{c} \Bigg)}  \dd y \Bigg]^{-1}
+    \label{eq:qxc}
+\end{equation}
+
+
+\begin{definition}[Probability of Transformation]
+The probability that a point $x \in S$ is transformed into a point $y \in T \subset S$ in $k$ trials is:\\
+\begin{equation}
+    P^{(k)}(T \, | \, x; \, c) = \begin{dcases}
+        \hfil \int_{y \in T} p^{(k)}_{xy}(c) \, \dd y & \text{for } x \notin T \\
+        \int_{y \in T} p^{(k)}_{xy}(c) \, \dd y + \Bigg( 1 - \int_{y \in S} p_{xy}(c) \, \dd y \Bigg)^{k} & \text{for } x \in T \\
+    \end{dcases}
+\end{equation}
+where
+\begin{align}
+    p^{(k)}_{xy}(c) &=\int_{z \in S} p^{(k-1)}_{xz}(c)p_{zy}(c) \, \dd z & \notag \\
+    & \hspace{10mm} +p^{(k-1)}_{xz}(c) + \Bigg( 1 - \int_{z \in S} p_{yz}(c) \, \dd z \Bigg) & \notag \\
+    & \hspace{10mm} + \Bigg( 1 - \int_{z \in S} p_{xz}(c) \, \dd z \Bigg)^{k-1}p_{xy}(c) 
+\end{align}
+i.e. $p^{(k)}_{xy}(c)$ is the quasi probability distribution function of transforming $x$ into $y$ in $k$ trials. $p^{(k)}_{xy}(c)$ is the summation of three terms, which are outlined below:\\
+(i). Term 1: the quasi probability distribution function of transforming $x$ into $z$ in $k-1$ trials, and from $z$ to $y$ in the next trial integrated over all $z$. \\
+(ii). Term 2: the quasi probability distribution function of transforming $x$ into $y$ in $k-1$ trials and then rejecting the $k$th trial. \\
+(iii). Term 3: the quasi probability distribution function of transforming $x$ into $y$ in one trial after $k-1$ rejected trials from $x$.
+
+
+
+
+
+
+
+
+
+\end{definition}
+
+
+% Celina to insert Def2.5, 2.6 and Eq.2.36 above this line
+% =============
+In \textbf{Eq. (\ref{eq:qxc})}, we present a stationary probability distribution function, which is the necessary requirement for the Simulated Annealing algorithm to converge to the minimum solution. We present the theorem that:
+\begin{theorem}
+If there is a finite number of local minima for a uniformly continuous function $f$, then:
+\begin{equation}
+    \forall \epsilon > 0 \, : \, \lim_{c \rightarrow 0} \int_{y \in B_f(\epsilon)} q(y,c) \, \dd y > 1-\epsilon
+\end{equation}
+\label{thm:convergence-sa}
+\begin{proof}
+For a finite number of local minima, we have:
+\begin{eqnarray}
+    && \exists \epsilon_1 > 0 \, : \, |f(x_{\text{loc}}) - f_{\min}| > \epsilon_1 \\
+    && \exists \epsilon_2 > 0, \, \forall x_{\min} \, : \, ||x_{\text{loc}} - x_{\min}|| > \epsilon_2 
+    \label{eqn:x-loc-x-min}
+\end{eqnarray}
+where $f_{\min} = f(x_{\min})$, $\forall x_{\min}$ as per \textbf{Eq. (\ref{eq:min-def})} and $x_{\text{loc}}$ is a local, non-global minimum point. Then pick a positive $\epsilon$ such that: 
+\begin{equation}
+    \epsilon < \dfrac{1}{4}\min \{ \epsilon_1, \epsilon_2 \}
+    \label{eqn:eps-one-fourth-min}
+\end{equation}
+It should be noted that if all minima are global, then select $\epsilon$ such that $\exists x \in S : f(x) - f_{\min} > \epsilon$. \vspace{5pt}
+
+\noindent As $f$ is uniformly continuous, then:
+\begin{equation}
+    \exists \delta_1 > 0, \, \forall x,y \in S : ||x-y|| \leq \delta_1 \Longrightarrow |f(x)-f(y)| < \dfrac{\epsilon}{2}
+\end{equation}
+Choosing a $\delta$ such that $\delta = \min \{ \delta_1/2, \epsilon \}$, we have:
+\begin{equation}
+    \forall y \in B_x(\delta) : f(y) - f_{\min} < \dfrac{\epsilon}{2}
+\end{equation}
+where $B_x(\delta)$ is given by \textbf{Definition \ref{def:close-to-min}}. \vspace{5pt}
+
+\noindent Consider a point $x_0 \in S \, \textbackslash \, B_x(\delta)$ where $f(x_0) - f_{\min} = \epsilon$. Note that this is possible due to the continuity of $f$. Then therefore:
+\begin{align}
+    \lim_{c \rightarrow 0} q(x_0, c) & = \lim_{c \rightarrow 0} \dfrac{\exp(-(f(x_0)-f_{\min}/c))}{\int_{y \in S} \exp(-(f(y)-f_{\min})/c)} \, \dd y & \notag \\
+    & = \lim_{c \rightarrow 0} \dfrac{\exp(-\epsilon/c)}{\int_{y \in S} \exp(-(f(y)-f_{\min})/c)} \, \dd y & \notag \\
+    & = \lim_{c \rightarrow 0} \Bigg[ \int_{y \in S} \exp((\epsilon-(f(y)-f_{\min}))/c) \, \dd y \Bigg]^{-1} & \notag \\
+    & = \lim_{c \rightarrow 0} \Bigg[ \int_{y \in S \, \textbackslash \, B_x(\delta)} \exp((\epsilon-(f(y)-f_{\min}))/c) \, \dd y  & \notag \\
+    & \hspace{10mm} + \int_{y \in B_x(\delta)} \exp((\epsilon-(f(y)-f_{\min}))/c) \, \dd y  \Bigg]^{-1} & \notag \\
+    & \leq \lim_{c \rightarrow 0} \Bigg[ \int_{y \in B_x(\delta)} \exp((\epsilon-(f(y)-f_{\min}))/c) \, \dd y  \Bigg]^{-1} & \notag \\
+    & \leq \Bigg[ \lim_{c \rightarrow 0}  \int_{y \in B_x(\delta)} \exp((\epsilon-\epsilon/2)/c) \, \dd y  \Bigg]^{-1} & \notag \\
+    & = \Bigg[ \lim_{c \rightarrow 0}   \exp(\epsilon/2c)m(B_x(\delta)) \,  \Bigg]^{-1} &
+\end{align}
+and can clearly be seen that this approaches to 0 as $c \rightarrow 0$. And so with the Lebesgue measure of $S$, $m(S)$, then we have:
+\begin{equation}
+    \exists c_0 > 0, \, \forall c < c_0 \, : \, q(x_0, c) < \dfrac{\epsilon}{m(S)}
+\end{equation}
+And hence:
+\begin{equation}
+   \forall c < c_0, \, \forall x \in S^+ (x) \, : \, q(x,c) \leq q(x_0, c) < \dfrac{\epsilon}{m(S)}
+\end{equation}
+and that:
+\begin{equation}
+    \forall c < c_0, \, \forall x \in S^- (x) \, : \, f(x) - f_{\min} < \epsilon
+\end{equation}
+with $S^+(x)$ and $S^-(x)$ defined as follows:
+\begin{eqnarray}
+    S^+(x) & = & \{ y \in S \, | \, f(y) \leq f(x) \} \\
+    S^-(x) & = & \{ y \in S \, | \, f(y) > f(x) \} 
+\end{eqnarray}
+$\forall c < c_0$, then we have:
+\begin{align}
+    1 & = \int_{y \in S} q(y,c) \, \dd y & \notag \\
+    & = \int_{y \in S^-(x_0)} q(y,c) \, \dd y + \int_{y \in S^+(x_0)} q(y,c) \, \dd y & \notag \\
+    & < \int_{y \in B_f(\epsilon)} q(y,c) \, \dd y + \int_{y \in S^+(x_0)} \dfrac{\epsilon}{m(S)} \, \dd y & \notag \\
+    & \leq \int_{y \in B_f(\epsilon)} q(y,c) \, \dd y + \epsilon 
+\end{align}
+Know that $B_f(\epsilon) = S^-(x_0)$. Because of \textbf{Eq. (\ref{eqn:x-loc-x-min})} and \textbf{Eq. (\ref{eqn:eps-one-fourth-min})}, then there is no local minimum in $B_f(\epsilon)$. Thus showing that
+\begin{equation}
+     \lim_{c \rightarrow 0} \int_{y \in B_f(\epsilon)} q(y,c) \, \dd y > 1-\epsilon
+\end{equation}
+proving the \textbf{Theorem \ref{thm:convergence-sa}} as desired.
+\end{proof}
+\end{theorem}

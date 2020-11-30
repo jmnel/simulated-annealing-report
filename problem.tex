@@ -1,0 +1,13 @@
+\section{Problem Definition}
+\label{sec:prob}
+
+Let $S\subset\mathbb{R}^n$ be a bounded set on $\mathbb{R}^n$ and $f:S\to\mathbb{R}^n$ be an $n$-dimensional real-valued function. \\
+The problem that simulated annealing wishes to solve is to find a point $x_{min} \in S$ such that $f(x_{min})$ is a global minimum on $S$. \\
+\\
+Specifically, 
+\begin{equation}
+    \forall x \in S : f(x_{\min}) \leq f(x)
+    \label{eq:min-def}
+\end{equation}
+
+The problem deals with global minimization; however, simulated annealing can find global maximization in the same way by reversing the sign of $f$ without loss of generality [1].

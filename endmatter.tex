@@ -1,0 +1,130 @@
+\appendix
+\section{Benchmark functions used}
+\label{apendix:a}
+
+\subsection{RB (Rosenbrock)}
+
+The Rosenbrock function is a widely used non-convex test function with a one global minimum inside of a long, narrow valley.
+It is defined as
+
+$$
+f\left(x_1, x_2\right):=\left(a-x\right)^2 + b\left(x_2-x_1^2\right)^2
+$$
+
+The global minimum is at $\vect{x}^\star=\begin{pmatrix} a & a^2\end{pmatrix}^T$. The typical values are $a=1$ and $b=100$ \cite{rosenbrock}.
+
+\subsection{GP (Goldstein-Price)}
+
+The Goldstein-Price\cite{dekkers} test function in $\Real^2$ is given by
+
+$$
+f(x_1,x_2) = \left[ 1 + \left( x_1 + x_2 +1\right)^2
+\left( 19-14x_1 + 3x_1^2 - 14x_2 + 6x_1x_2 + 3x_2^2\right)\right]
+$$
+
+$$
+\times \left[ 30 + \left(2x_1-3x_2\right)^2\left(18-32x_1+12x_2+48x_2-36x_1x_2+27x_2^2\right)\right]
+$$
+
+$\mathcal{S} = \left\lbrace \vect{x} : -2 \leq x_i \leq 2, i=1,2\right\rbrace$. It has a global minimum at
+$\vect{x}^\star = \begin{pmatrix} 0 & -1\end{pmatrix}^T$.
+
+\subsection{H3 and H6 (Hartmann's family)}
+$$
+f(\vect{x}) = -\sum_{i=1}^m c_i \exp\left( -\sum_{j=1}^n a_{ij}\left(x_i - p_{ij}\right)^2\right)
+$$
+
+where for H3 in $\vect{x}\in\Real^4$, with $m=4$ and $n=3$ is given by
+
+$$
+A=[a_{ij}] = \begin{bmatrix}
+3 & 10 & 30\\
+0.1 & 10 & 35 \\
+3 & 10 & 30 \\
+0.1 & 10 & 35
+\end{bmatrix},
+\quad
+\vect{c} = \begin{bmatrix} 1 \\ 1.2 \\ 3 \\ 3.2 \end{bmatrix},
+$$
+
+$$
+P=[p_{ij}] = \begin{bmatrix}
+0.3689 & 0.1170 & 0.2673 \\
+0.4699 & 0.4387 & 0.7470 \\
+0.1091 & 0.8732 & 0.5547 \\
+0.038150 & 0.5743 & 0.8828 \\
+\end{bmatrix}
+$$
+
+where for H6 in $\vect{x}\in\Real^4$, with $m=4$ and $n=6$ is given by
+
+$$
+A=[a_{ij}] = \begin{bmatrix}
+10 & 3 & 17 & 3.5 & 1.7 & 8\\
+0.05 & 10 & 17 & 0.1 & 8 & 14  \\
+3 & 3.5 & 1.7 & 10 & 17 & 8 \\
+17 & 8 & 0.05 & 10 & 0.1 & 14 
+\end{bmatrix},
+\quad
+\vect{c} = \begin{bmatrix} 1 \\ 1.2 \\ 3 \\ 3.2 \end{bmatrix},
+$$
+
+$$
+P=[p_{ij}] = \begin{bmatrix}
+0.1312 & 0.1696 & 0.5569 & 0.0124 & 0.8283 & 0.5886 \\
+0.2329 & 0.4135 & 0.8307 & 0.3736 & 0.1004 & 0.9991 \\
+0.2348 & 0.1451 & 0.3522 & 0.2883 & 0.3047 & 0.6650\\
+0.4047 & 0.8828 & 0.8732 & 0.5743 & 0.1091 & 0.0381 \\
+\end{bmatrix}
+$$
+
+\subsection{S5, S7 and S10 (Shekel's Family)}
+The Shekel's family of functions, S5, S7, and S10 \cite{dekkers}, is given as:
+$$f(x) = -\sum_{i=1}^m ((x-a_i)^T(x-a_i)+c_i)^{-1}$$
+which has a dimension of $n=4$, and $m=5$, $m=7$, and $m=10$ for the S5, S7, and S10 respectively. Let $x = (x_1, x_2, ..., x_n)^T$, and $a_i = (a_{i1}, a_{i2}, ..., a_{in})^T$. \vspace{5pt}
+
+Thus for S5:
+$$
+A=[a_{ij}] = \begin{bmatrix}
+4 & 4 & 4 & 4 \\
+1 & 1 & 1 & 1 \\
+8 & 8 & 8 & 8 \\
+6 & 6 & 6 & 6 \\
+3 & 7 & 3 & 7 \\
+\end{bmatrix},
+\quad
+\vect{c} = \begin{bmatrix} 0.1 \\ 0.2 \\ 0.2 \\ 0.2 \\ 0.4 \\ 0.4 \end{bmatrix},
+$$
+
+Then for S7:
+$$
+A=[a_{ij}] = \begin{bmatrix}
+4 & 4 & 4 & 4 \\
+1 & 1 & 1 & 1 \\
+8 & 8 & 8 & 8 \\
+6 & 6 & 6 & 6 \\
+3 & 7 & 3 & 7 \\
+2 & 9 & 2 & 9 \\
+5 & 5 & 3 & 3 \\
+\end{bmatrix},
+\quad
+\vect{c} = \begin{bmatrix} 0.1 \\ 0.2 \\ 0.2 \\ 0.2 \\ 0.4 \\ 0.4 \\ 0.6 \\ 0.3 \end{bmatrix},
+$$
+
+Then for S10:
+$$
+A=[a_{ij}] = \begin{bmatrix}
+4 & 4 & 4 & 4 \\
+1 & 1 & 1 & 1 \\
+8 & 8 & 8 & 8 \\
+6 & 6 & 6 & 6 \\
+3 & 7 & 3 & 7 \\
+2 & 9 & 2 & 9 \\
+5 & 5 & 3 & 3 \\
+8 & 1 & 8 & 1 \\
+6 & 2 & 6 & 2 \\
+7 & 3.6 & 7 & 3.6
+\end{bmatrix},
+\quad
+\vect{c} = \begin{bmatrix} 0.1 \\ 0.2 \\ 0.2 \\ 0.2 \\ 0.4 \\ 0.4 \\ 0.6 \\ 0.3 \\ 0.7 \\ 0.5 \\ 0.5 \end{bmatrix},
+$$

@@ -1,0 +1,61 @@
+%\usepackage[ruled,vlined]{algorithm2e}
+
+
+\documentclass[sigconf]{acmart}
+\settopmatter{printacmref=false} % Removes citation information below abstract
+\renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+    
+\makeatletter
+\DeclareRobustCommand{\textsupsub}[2]{{%
+  \m@th\ensuremath{%
+    ^{\mbox{\fontsize\sf@size\z@#1}}%
+    _{\mbox{\fontsize\sf@size\z@#2}}%
+  }%
+}}
+\makeatother
+
+\usepackage[ruled,linesnumbered,noend]{algorithm2e}
+%\usepackage{algorithmic}
+%\usepackage{algorithm}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{cleveref}
+\usepackage[vlined]{algorithm2e}
+\newcommand{\vect2}[1]{\boldsymbol{#1}}
+\newcommand{\Real}[0]{\mathbb{R}}
+\newcommand{\Int}[0]{\mathbb{Z}}
+\newcommand{\Nat}[0]{\mathbb{N}}
+\usepackage{setspace}
+
+\newtheoremstyle{remboldstyle}
+   {}{}{}{}{\bfseries}{.}{.5em}{{\thmname{#1 }}{\thmnumber{#2}}{\thmnote{ (#3)}}}
+\theoremstyle{remboldstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+
+\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+\counterwithin*{equation}{section}
+
+\usepackage{enumitem}
+\newcommand{\dd}{\mathrm{d}}
+\settopmatter{printfolios=true}
+
+\makeatletter
+\newcommand{\nosemic}{\renewcommand{\@endalgocfline}{\relax}}
+\newcommand{\dosemic}{\renewcommand{\@endalgocfline}{\algocf@endline}}
+\newcommand{\pushline}{\Indp}
+\newcommand{\popline}{\Indm\dosemic}
+\makeatother
+\SetKwComment{Comment}{\vartriangleright\:\: }{}
+\renewcommand{\nl}{}
+
+%\input{common}
+
+\begin{document}

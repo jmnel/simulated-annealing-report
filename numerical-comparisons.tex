@@ -1,0 +1,213 @@
+\section{Numerical Comparisons}
+\label{sec:experiments}
+
+\subsection{MS (Multi-start)}
+\label{compare:ms}
+
+Multi-start techniques form a family of heuristic global optimization algorithms. These techniques work in a two-phase
+process. In the first global phase, starting points are sampled in the feasible region or domain $\mathcal{S}$ of the
+objective function. The most naive implementation of the global phase is to simply perform a uniform sampling of $\mathcal{S}$.
+Some members of this family of algorithms utilize sophisticated heuristics to generate starting points such as the
+Scatter Search technique.
+
+The local phase of multi-start algorithms use the starting points from the global phase to perform a local optimization
+using one of the many algorithms for local optimization. Multi-start algorithms alternate between the global and local
+phases until a solution is found \cite{Ugray2007ScatterSA}.
+
+The hardest part of divising an efficient Multi-start method is the selection of an appropriate stopping rule.
+Variations in the literature range from several addhoc holes to Bayesian stoppic rules. For the sake of comparison
+we utilize a double-box stopping rule [cite box-cstr here].
+
+Let $m(\mathcal{S})$ be the Lebesque measure of the search region $\mathcal{S}$. Since the local search method is
+deterministic, in the limit of $n\rightarrow \infty$ runs of the local search method, the algorithm will converge
+to $w$ unique local minima. Each local minimum $\vect{x}_i^\star \in\mathcal{S}$ has an associated region of
+attraction $A_i$ defined as
+
+$$
+A_i := \left\lbrace \vect{x} : \vect{x}\in\mathcal{S}, \texttt{LS}(\vect{x}) = \vect{x}_i^\star \right\rbrace.
+$$
+
+Since $\mathcal{S}$ contains $w$ local minima, and the $A_i\cap A_j=\emptyset$, $A_i$ partitions $\mathcal{S}$ i.e.,
+
+$$
+\bigcup_{i=1}^w A_i = \mathcal{S}.
+$$
+
+Furthermore, if $m(A_i)$ denotes the Lebesque measure of $A_i$, then
+
+$$
+m(\mathcal{S}) = \sum_{i=1}^w m(A_i).
+$$
+
+If some initial point $\vect{x}_0 \sim \text{Uniform}(\mathcal{S})$, then the probability of $\vect{x}_0$ begin contained
+in $A_i$ is simply
+
+$$
+P(\vect{x}_0 \in A_i) = \frac{m(A_i)}{m(\mathcal{S})}.
+$$
+
+The double-box stopping rule is based on the idea that we want to ensure that all $A_i$ are sampled in $\mathcal{S}$, but
+additional sampling results in uncessary computation. Define $C$ has a relative measure of the coverage after the discovery
+of $w$ local minima, as
+
+\begin{equation}\label{eq:coverage}
+C = \sum_{i=1}^w \frac{m(\mathcal{A}_i)}{m(\mathcal{S})}.
+\end{equation}
+
+A sensible heuristic is to stop when $C\longrightarrow 1$. The quantity inside the summation of \cref{eq:coverage} is
+not calculatable in practice, but as $w\rightarrow \infty$, we approximate it with
+
+\begin{equation}\label{eq:cov_approx}
+C \approx \sum_{i=1}^w \frac{L_i}{L},
+\end{equation}
+
+where $L_i$ is the number of starting points of the LS which converged to the local minimizer $\vect{x}_i$, and
+$L$ is the total of initial points so far. The quantity in \cref{eq:cov_approx} is equal to 1 by definition, so another
+means must be determined. Construct a region $\mathcal{S}_2$ such that $\mathcal{S}\subset \mathcal{S}_2$ and 
+$m(\mathcal{S}_2) = 2\cdot m(\mathcal{S})$. For each iteration, we sample from $\mathcal{S}_2$ until we have a point in
+$\mathcal{S}$, in other words points in $A_0 = \mathcal{S}_2 \setminus \mathcal{S}$ are discared. Also let
+$L_0$ denote the number of sampled points in $A_0$. The total count of sampled points is now given by
+
+$$
+L = L_0 + \sum_{i=1}^w L_i,
+$$
+
+and the relative coverage $C$ is now
+
+$$
+C = \frac{1}{m(\mathcal{S})} \sum_{i=1}^w m(A_i) = 2\sum_{i=1}^w \frac{m(A_i)}{m(\mathcal{S}_2)}
+$$
+
+and finally we can approximate relative coverage with
+
+$$
+C \approx \frac{2}{L}\sum_{i=1}^w L_i
+$$
+
+After $n$ iterations, let $M_n$ denote the number of points in $\mathcal{S}_2$, and $n$ are in $\mathcal{S}$. Then define
+$\delta_n := n / M_k$ which has an expectation which in the limit of large $n$
+
+$$
+\left\langle \delta \right\rangle_n = \frac{1}{n}\sum_{i=1}^n \delta_i \longrightarrow
+\frac{m(\mathcal{S})}{m(\mathcal{S}_2)} = \frac{1}{2}
+$$
+
+The variance is $\sigma_n^2(\delta) = \left\langle \delta^2\right\rangle_n - \left\langle\delta\right\rangle^2_n$ which
+$\longrightarrow 0$ as $n\longrightarrow \infty$. Finally, the double-box rule is
+
+\subsubsection*{Double-box stopping rule:}
+
+\hfill\\
+
+\textbf{(1)} Continue iterating if new minima are found. \textbf{(2)} If no new minima are found, let $\sigma_\text{last}(\delta)$ be the s.t.d. at the last iteration
+at which a minimum was found. Contnue iterating while
+
+\begin{equation}\label{eq:double-box-rule}
+    \sigma^2(\delta) < \rho \sigma^2_{\text{last}}(\delta)
+\end{equation}
+
+where $\rho \in (0,1)$ is a paramter that performs exhaustive search when $\rho$ is close to 0 and emphasises less iterations
+when $\rho$ is close to 1.
+
+\subsubsection*{Constructing $\mathcal{S}_2$ from $\mathcal{S}$:}
+
+\hfill\\
+
+In order to apply the double-box stopping rule, we need to construct the box region $\mathcal{S}_2$ such that
+$m(\mathcal{S}_2) = 2\cdot m(\mathcal{S})$. Suppose $\mathcal{S}\in\Real^n$, then we can scale the bounds of $\mathcal{S}
+= [l_1, u_1] \times \cdots [l_n, u_n]$ 
+by $2^{1/n}$, i.e.,
+
+$$
+l_i^{(2)} = l_i - \frac{1}{2}\left( 2^{1/n} - 1\right)\left( u_i - l_i \right)\text{ for } i = 1,\ldots n
+$$
+$$
+u_i^{(2)} = u_i + \frac{1}{2}\left( 2^{1/n} - 1\right)\left( u_i - l_i \right)\text{ for } i = 1,\ldots n
+$$
+
+%\begin{algorithm}
+%\setstretch{1.4}
+%\caption{Multi-start with double-box stopping rule}\label{algo:multistart}
+%\vspace{8pt}
+%\nosemic
+%\SetAlgoLined
+%\KwIn{$f:\mathcal{S} \longrightarrow \Real, \nabla f, \mathcal{S}, N, \epsilon_s, \tau, \gamma$}
+
+%$f^\star \longleftarrow \infty$\;
+
+%\;
+
+%\For{$n\in \left\lbrace 1,\ldots, N\right\rbrace$}{
+%$\vect{x}_0 \longleftarrow \mathrm{Uniform}\left(\mathcal{S}\right)$ \Comment*{random sample init. point}
+
+%$x_l = \texttt{steepest\_descent}(f, \nabla f, \vect{x}_0, \tau)$ \;
+
+%\If{$f(\vect{x}_l) \leq f^\star$}{
+%    $f^\star \longleftarrow f(\vect{x}_l)$ \;
+%    
+%    $\vect{x}^\star \longleftarrow \vect{x}_l$ \;
+%}
+
+%\uIf{$n=0$}{
+%    $f^\star_s \longleftarrow C$ \Comment*{$0< C \in\Real$ to prevent 0}
+%    $f^\star_s^{(0)} \longleftarrow f_s^\star$ \;
+%} \uElse{
+%    $f^\star_s^{(0)} \longleftarrow f^\star_s$ \;
+%    $f^\star_s = \gamma f^\star + (1-\gamma)f^\star_s^{(0)}$
+%    \;
+%    \Comment{Stop when smoothed improvement reaches 0}
+%    $\Delta_s = f^\star_s^{(0)} - f^\star_s$ \;
+%    
+%    \Comment{Check stop condition}
+%    \If{ $\Delta_s \leq \epsilon_s$}{
+%        \KwOut{Solution found $\vect{x}^\star$}
+%    }
+%}
+
+%\;
+%\KwOut{Failed to find solution in $N$ iterations, $\vect{x}^\star$}\;
+%}
+%\end{algorithm}
+
+\subsection{DE (Differential Evolution)}
+\label{compare:de}
+
+Differential Evolution is global, gradient-free stochastic optimization algorithm. This population-based method mutates
+each solution candidate by mixing the solution with other members of the  population \cite{storn}.
+\emph{scipy.optim.differential\_evolution} is used as comparison.
+
+\subsection{BH (Basin Hopping)}
+\label{compare:bh}
+
+Basin-hopping is another two-phase global optimization algorithm inspired by energy minimization of clusters of atoms \cite{wales}.
+\emph{scipy.optimize.basinhopping} is used for comparison.
+
+\subsection{Evaluation metrics}
+
+\subsubsection{Solution diversity}
+
+Given that $mathcal{S}$ is partitioned by regions of attraction $A_i$ around each local miminum, one way to measure the
+efficiency of a global optimization method is to measure the frequency with which the method converges to each global
+minimum. A more efficient method will converge to each global minimum with more uniform probability, implying that
+less total iterations are needed to find all the global minima.
+
+Suppose that $f :\mathcal{S}\longrightarrow \Real$ has exactly $w$ global minima. After a large number $M$ of runs,
+the method has converged to a global minimum $\vect{x}^\star_i$ $w_i$ times. We can define a \emph{solution diversity score} as
+
+\begin{equation}\label{eq:diversity}
+    \xi_M = \sum_{i=1}^w \left| \frac{w_i}{M} - \frac{1}{w}\right|.
+\end{equation}
+
+Generally, the regions of attraction $A_i$ for all local and global minima could have different Lebesque measures, so a technique
+that uses global uniform sampling would oversample some solutions and undersample others.
+
+An ideal technique would converge to solution $\vect{x}_i$ on $M/w$ occasions after $M$ runs. \Cref{eq:diversity} is
+minimized by such a technique yielding uniform convergence to all minima. A lower $\xi_M$ indicates a more efficient algorithm,
+whereas if some $\vect{x}_i^\star$ are over represented (and some are under represented), $\xi_M$ would be higher, and thus
+indicate an inefficient algorithm.
+
+\subsubsection{Number of evaluations of $f$ and $\nabla f$:}
+
+The number of evalaluations of $f$ and $\nabla f$ is another obvious indication of the computational efficiency of a given
+optimization method. Our implementation, and methods to which we compare Simulated Annealing facilate the counting of
+these function evaluations in all sub procedures of a given method.
