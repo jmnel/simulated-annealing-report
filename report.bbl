@@ -1,0 +1,120 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{7}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Dekkers and Aarts}{Dekkers and Aarts}{1991}]%
+        {dekkers}
+\bibfield{author}{\bibinfo{person}{Anton Dekkers} {and} \bibinfo{person}{Emile
+  Aarts}.} \bibinfo{year}{1991}\natexlab{}.
+\newblock \showarticletitle{{Global Optimization and Simulated Annealing}}.
+\newblock \bibinfo{journal}{\emph{Mathematical Programming}}
+  \bibinfo{volume}{50} (\bibinfo{year}{1991}), \bibinfo{pages}{367--393}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Lagaris and Tsoulos}{Lagaris and
+  Tsoulos}{2008}]%
+        {lagaris}
+\bibfield{author}{\bibinfo{person}{I.E. Lagaris} {and} \bibinfo{person}{I.G.
+  Tsoulos}.} \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Stopping rules for box-constrained stochastic
+  global optimization}.
+\newblock \bibinfo{journal}{\emph{Appl. Math. Comput.}} \bibinfo{volume}{197},
+  \bibinfo{number}{2} (\bibinfo{year}{2008}), \bibinfo{pages}{622 -- 632}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Neumaier}{Neumaier}{2003}]%
+        {neumaier}
+\bibfield{author}{\bibinfo{person}{Arnold Neumaier}.}
+  \bibinfo{year}{2003}\natexlab{}.
+\newblock \bibinfo{title}{Complete Search in Continuous Global Optimization and
+  Constraint Satisfaction}.
+\newblock
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Rosenbrock}{Rosenbrock}{1960}]%
+        {rosenbrock}
+\bibfield{author}{\bibinfo{person}{H.H. Rosenbrock}.}
+  \bibinfo{year}{1960}\natexlab{}.
+\newblock \showarticletitle{{An automatic method for finding the greatest or
+  least value of a function}}.
+\newblock \bibinfo{journal}{\emph{Comput. J.}}  \bibinfo{volume}{3}
+  (\bibinfo{year}{1960}), \bibinfo{pages}{175--184}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Storn and Price}{Storn and Price}{1997}]%
+        {storn}
+\bibfield{author}{\bibinfo{person}{R Storn} {and} \bibinfo{person}{K Price}.}
+  \bibinfo{year}{1997}\natexlab{}.
+\newblock \showarticletitle{{Differential Evolution-a Simple and Efficient
+  Heuristic for Global Optimization over Continuous Spaces}}.
+\newblock \bibinfo{journal}{\emph{Journal of Global Optimization}}
+  \bibinfo{volume}{11} (\bibinfo{year}{1997}), \bibinfo{pages}{341--359}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Ugray, Lasdon, Plummer, Glover, Kelly, and
+  Mart{\'i}}{Ugray et~al\mbox{.}}{2007}]%
+        {Ugray2007ScatterSA}
+\bibfield{author}{\bibinfo{person}{Zsolt Ugray}, \bibinfo{person}{L. Lasdon},
+  \bibinfo{person}{J. Plummer}, \bibinfo{person}{Fred~W. Glover},
+  \bibinfo{person}{J.~P. Kelly}, {and} \bibinfo{person}{R. Mart{\'i}}.}
+  \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{Scatter Search and Local NLP Solvers: A Multistart
+  Framework for Global Optimization}.
+\newblock \bibinfo{journal}{\emph{INFORMS J. Comput.}}  \bibinfo{volume}{19}
+  (\bibinfo{year}{2007}), \bibinfo{pages}{328--340}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Wales and Doye}{Wales and Doye}{1997}]%
+        {wales}
+\bibfield{author}{\bibinfo{person}{D.J. Wales} {and} \bibinfo{person}{J.P.K
+  Doye}.} \bibinfo{year}{1997}\natexlab{}.
+\newblock \showarticletitle{{Global Optimization by Basin-Hopping and the
+  Lowest Energy Structures of Lennard-Jones Clusters Containing up to 110
+  Atoms}}.
+\newblock \bibinfo{journal}{\emph{Journal of Physical Chemistry}}
+  \bibinfo{volume}{101} (\bibinfo{year}{1997}), \bibinfo{pages}{5111--5116}.
+\newblock
+
+
+\end{thebibliography}

@@ -1,0 +1,136 @@
+\documentclass[sigconf]{acmart}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+    
+\makeatletter
+\DeclareRobustCommand{\textsupsub}[2]{{%
+   \m@th\ensuremath{%
+     ^{\mbox{\fontsize\sf@size\z@#1}}%
+     _{\mbox{\fontsize\sf@size\z@#2}}%
+   }%
+}}
+\makeatother
+
+\usepackage[ruled,vlined,noend]{algorithm2e}
+%\usepackage{algorithmic}
+%\usepackage{algorithm}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{chngcntr}
+\usepackage{fontawesome}
+%\usepackage[backend=biber]{biblatex}
+\usepackage{cleveref}
+
+
+
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+
+\newtheoremstyle{remboldstyle}
+{}{}{}{}{\bfseries}{.}{.5em}{{\thmname{#1 }}{\thmnumber{#2}}{\thmnote{ (#3)}}}
+\theoremstyle{remboldstyle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\Real}[0]{\mathbb{R}}
+\newcommand{\Int}[0]{\mathbb{Z}}
+\newcommand{\Nat}[0]{\mathbb{N}}
+
+% Change look of algorithm2e environment.
+\makeatletter
+\newcommand{\nosemic}{\renewcommand{\@endalgocfline}{\relax}}
+\newcommand{\dosemic}{\renewcommand{\@endalgocfline}{\algocf@endline}}
+\newcommand{\pushline}{\Indp}
+\newcommand{\popline}{\Indm\dosemic}
+\makeatother
+\SetKwComment{Comment}{$\vartriangleright\:\:$ }{}
+
+\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+\counterwithin*{equation}{section}
+
+\begin{document}
+
+\settopmatter{printfolios=true}
+
+
+
+\title{The Numerical Analyses of Global Optimization and Simulated Annealing}
+\subtitle{\href{github.com/jmnel/simulated-annealing}{\faGithub \hspace{1mm} \texttt{github.com/jmnel/simulated-annealing}}}
+
+% -- BEGIN AUTHORS --
+\author{Jacques Nel}
+\authornote{All authors contributed equally to this research.}
+\email{jmn23@my.yorku.ca}
+\affiliation{%
+\streetaddress{P.O. Box 1212}
+\city{ID 212588109}
+}
+
+\author{Celina Landolfi}
+\authornotemark[1]
+\email{clandolfi17@gmail.com}
+\affiliation{
+\streetaddress{P.O. Box 1212}
+\city{ID 215587892 }
+}
+
+\author{Gian Alix}
+\authornotemark[1]
+\email{gian.alix@gmail.com}
+\affiliation{
+\streetaddress{P.O. Box 1212}
+\city{ID 214760870}
+}
+% -- END AUTHORS --
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+% \begin{abstract}
+%   This assignment is about three network models and their properties: 
+%   Erdős-Rényi random graph model, Watts–Strogatz small-world graph model and Barabási–Albert preferential attachment model.
+% \end{abstract}
+
+% \ccsdesc[500]{Computer systems organization~Embedded systems}
+% \ccsdesc[300]{Computer systems organization~Redundancy}
+% \ccsdesc{Computer systems organization~Robotics}
+% \ccsdesc[100]{Networks~Network reliability}
+
+\keywords{global optimization, simulated annealing, continuous variables}
+
+
+\maketitle
+
+\input{introduction}
+\input{problem}
+\input{numerical-method}
+\input{theoretical-results}
+\input{numerical-results}
+\input{numerical-comparisons}
+\input{conclusions}
+
+{
+    \setstretch{1.4}
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{bibliography}
+}
+
+\vspace{20pt}
+
+
+\input{endmatter}
+
+\end{document}
+\endinput

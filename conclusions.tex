@@ -1,0 +1,28 @@
+\section{Conclusions}
+\label{sec:conclusions}
+
+The work of Dekkers and Aarts have placed Simulated Annealing on a firm rigorous framework that enables further
+work and understanding of stochastic global optimization methods.
+
+\subsection{A robust and efficient method}
+
+Our empirical results, achieved with a non-optimized, and rather
+crude implementation, show that Simulated Annealing is both a robust and efficient method. Simulated Annealing has
+outperformed the chosen global optimization methods provided by
+
+\noindent\texttt{scipy.optimize}, in respect to our multiple
+global minima test.
+
+\subsection{Further work}
+
+Simulated Annealing, Multi-start, and the various other methods provided by \texttt{scipy.optimize} were used with
+default parameters. Further exploration and analysis should be done to determine optimal parameters for all methods 
+to get a more fair comparison between the different methods.
+
+Regrettably, our small selection of test problems had a only a small number of global and local minima. It would be
+insightful to explore test problems that have large numbers of minima. It is uncertain if our results would hold
+in such a regime.
+
+Lastly, another interesting avenue of exploration would be to develop different methods of point generation for the
+Markov chains. Does there exist a way to sample points directly from a probability distribution using function information?
+This would avoid the costly and wasteful discarding or a large number of points.
